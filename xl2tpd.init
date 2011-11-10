@@ -1,0 +1,84 @@
+#!/bin/sh
+#
+# xl2tpd	Start/Stop the xl2tpd daemon
+#
+# chkconfig:	2345 15 85
+# description:	xl2tpd is Layer 2 Tunnelling Protocol Daemon (RFC 2661)
+#
+# processname:	xl2tpd
+# config:	/etc/xl2tpd/xl2tpd.conf
+# pidfile:	/var/run/xl2tpd.pid
+
+
+# Source function library.
+. /etc/rc.d/init.d/functions
+
+# Get service config
+[ -f /etc/sysconfig/xl2tpd ] && . /etc/sysconfig/xl2tpd
+
+start() {
+	# Check if the service is already running?
+	if [ -f /var/lock/subsys/xl2tpd ]; then
+		msg_already_running "L2TP daemon"
+		return
+	fi
+
+	msg_starting "L2TP daemon"
+	daemon /usr/sbin/xl2tpd -p /var/run/xl2tpd.pid
+	RETVAL=$?
+	[ $RETVAL -eq 0 ] && touch /var/lock/subsys/xl2tpd
+}
+
+stop() {
+	if [ ! -f /var/lock/subsys/xl2tpd ]; then
+		msg_not_running "L2TP daemon"
+		return
+	fi
+
+	msg_stopping "L2TP daemon"
+	killproc xl2tpd
+	rm -f /var/lock/subsys/xl2tpd
+}
+
+condrestart() {
+	if [ ! -f /var/lock/subsys/xl2tpd ]; then
+		msg_not_running "L2TP daemon"
+		RETVAL=$1
+		return
+	fi
+
+	stop
+	start
+}
+
+#upstart_controlled
+
+RETVAL=0
+# See how we were called.
+case "$1" in
+  start)
+  	start
+	;;
+  stop)
+  	stop
+	;;
+  restart)
+	stop
+	start
+	;;
+  try-restart)
+	condrestart 0
+	;;
+  force-reload)
+	condrestart 7
+	;;
+  status)
+	status --pidfile /var/run/xl2tpd.pid xl2tpd
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|try-restart|force-reload|status}"
+	exit 3
+esac
+
+exit $RETVAL

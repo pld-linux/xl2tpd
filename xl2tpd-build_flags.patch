@@ -1,0 +1,21 @@
+diff -dur xl2tpd-1.3.0.orig/Makefile xl2tpd-1.3.0/Makefile
+--- xl2tpd-1.3.0.orig/Makefile	2011-07-24 02:13:59.000000000 +0200
++++ xl2tpd-1.3.0/Makefile	2011-11-10 20:27:32.000000000 +0100
+@@ -90,7 +90,7 @@
+ 
+ IPFLAGS?= -DIP_ALLOCATION
+ 
+-CFLAGS+= $(DFLAGS) -O2 -fno-builtin -Wall -DSANITY $(OSFLAGS) $(IPFLAGS)
++CFLAGS+= $(DFLAGS) $(RPMCFLAGS) -fno-builtin -Wall -DSANITY $(OSFLAGS) $(IPFLAGS)
+ HDRS=l2tp.h avp.h misc.h control.h call.h scheduler.h file.h aaa.h md5.h
+ OBJS=xl2tpd.o pty.o misc.o control.o avp.o call.o network.o avpsend.o scheduler.o file.o aaa.o md5.o
+ SRCS=${OBJS:.o=.c} ${HDRS}
+@@ -114,7 +114,7 @@
+ 	$(CC) $(LDFLAGS) -o $@ $(OBJS) $(LDLIBS)
+ 
+ $(CONTROL_EXEC): $(CONTROL_SRCS)
+-	$(CC) $(CONTROL_SRCS) -o $@
++	$(CC) $(RPMCFLAGS) $(LDFLAGS) $(CONTROL_SRCS) -o $@
+ 
+ pfc:
+ 	$(CC) $(CFLAGS) -c contrib/pfc.c

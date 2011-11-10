@@ -1,0 +1,4 @@
+# Customized settings for xl2tpd
+
+# Nice level for xl2tpd
+SERVICE_RUN_NICE_LEVEL="+0"
