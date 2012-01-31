@@ -3,7 +3,7 @@ Summary:	Layer 2 Tunnelling Protocol Daemon (RFC 2661)
 Summary(pl.UTF-8):	Demon tunelowania L2TP (RFC 2661)
 Name:		xl2tpd
 Version:	1.3.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		Networking/Daemons
 Source0:	http://www.xelerance.com/wp-content/uploads/software/xl2tpd/%{name}-%{version}.tar.gz
