@@ -10,6 +10,7 @@ Source0:	http://www.xelerance.com/wp-content/uploads/software/xl2tpd/%{name}-%{v
 # Source0-md5:	28264284552c442b24cf421755a2bb48
 Source1:	%{name}.sysconfig
 Source2:	%{name}.init
+Source3:	%{name}.tmpfiles
 Patch0:		%{name}-build_flags.patch
 Patch1:		%{name}-control_crash.patch
 URL:		http://www.xelerance.com/software/xl2tpd/
@@ -46,7 +47,8 @@ combination with IPsec implementations such as Openswan.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/etc/{sysconfig,rc.d/init.d} \
 		$RPM_BUILD_ROOT/%{_sysconfdir}/%{name} \
-		$RPM_BUILD_ROOT/var/run/%{name}
+		$RPM_BUILD_ROOT/var/run/%{name} \
+		$RPM_BUILD_ROOT/usr/lib/tmpfiles.d
 
 install doc/l2tp-secrets.sample $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/l2tp-secrets
 install doc/l2tpd.conf.sample $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/xl2tpd.conf
@@ -57,6 +59,7 @@ install doc/l2tpd.conf.sample $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/xl2tpd.conf
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
+install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -84,4 +87,5 @@ fi
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/l2tp-secrets
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
+/usr/lib/tmpfiles.d/%{name}.conf
 %dir /var/run/%{name}
