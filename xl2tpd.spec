@@ -1,21 +1,21 @@
 Summary:	Layer 2 Tunnelling Protocol Daemon (RFC 2661)
 Summary(pl.UTF-8):	Demon protokołu tunelowania warstwy 2 (L2TP, RFC 2661)
 Name:		xl2tpd
-Version:	1.3.0
-Release:	2
+Version:	1.3.11
+Release:	1
 License:	GPL v2
 Group:		Networking/Daemons
-#Source0Download: http://www.xelerance.com/services/software/xl2tpd/
-Source0:	http://www.xelerance.com/wp-content/uploads/software/xl2tpd/%{name}-%{version}.tar.gz
-# Source0-md5:	28264284552c442b24cf421755a2bb48
+#Source0Download: https://github.com/xelerance/xl2tpd/releases
+Source0:	https://github.com/xelerance/xl2tpd/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	46a881855ce928e86cda5ed1c8909c93
 Source1:	%{name}.sysconfig
 Source2:	%{name}.init
 Source3:	%{name}.tmpfiles
 Patch0:		%{name}-build_flags.patch
 Patch1:		%{name}-control_crash.patch
 URL:		http://www.xelerance.com/software/xl2tpd/
-BuildRequires:	rpmbuild(macros) >= 1.228
-BuildRequires:  libpcap-devel
+BuildRequires:	libpcap-devel
+BuildRequires:	rpmbuild(macros) >= 1.644
 Requires(post,preun):	/sbin/chkconfig
 Requires:	rc-scripts
 Requires:	ppp
@@ -51,7 +51,7 @@ implementacjami IPsec, takimi jak Openswan.
 %build
 %{__make} \
 	CC="%{__cc}" \
-	RPMCFLAGS="%{rpmcflags}" \
+	OPTFLAGS="%{rpmcflags}" \
 	LDFLAGS="%{rpmldflags}" \
 	PREFIX=%{_prefix}
 
@@ -71,7 +71,7 @@ install doc/l2tpd.conf.sample $RPM_BUILD_ROOT/%{_sysconfdir}/%{name}/xl2tpd.conf
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/sysconfig/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
-install %{SOURCE3} $RPM_BUILD_ROOT/usr/lib/tmpfiles.d/%{name}.conf
+install %{SOURCE3} $RPM_BUILD_ROOT%{systemdtmpfilesdir}/%{name}.conf
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -97,10 +97,11 @@ fi
 %{_mandir}/man5/l2tp-secrets.5*
 %{_mandir}/man5/xl2tpd.conf.5*
 %{_mandir}/man8/xl2tpd.8*
+%{_mandir}/man8/xl2tpd-control.8*
 %dir %{_sysconfdir}/%{name}
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/%{name}.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/%{name}/l2tp-secrets
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %config(noreplace) %verify(not md5 mtime size) /etc/sysconfig/%{name}
-/usr/lib/tmpfiles.d/%{name}.conf
+%{systemdtmpfilesdir}/%{name}.conf
 %dir /var/run/%{name}

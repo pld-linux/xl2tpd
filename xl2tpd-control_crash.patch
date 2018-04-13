@@ -1,12 +1,11 @@
-diff -dur xl2tpd-1.3.0.orig/xl2tpd-control.c xl2tpd-1.3.0/xl2tpd-control.c
---- xl2tpd-1.3.0.orig/xl2tpd-control.c	2011-07-24 02:13:59.000000000 +0200
-+++ xl2tpd-1.3.0/xl2tpd-control.c	2011-11-10 20:30:35.000000000 +0100
-@@ -96,7 +96,7 @@
+--- xl2tpd-1.3.11/xl2tpd-control.c.orig	2018-04-13 22:50:18.501169772 +0200
++++ xl2tpd-1.3.11/xl2tpd-control.c	2018-04-13 22:51:25.761169005 +0200
+@@ -162,7 +162,7 @@
      struct command_t* command = NULL;    
      int i; /* argv iterator */
  
--    if (!strncmp (argv[1], "--help", 6))
-+    if (argc < 2 || !strncmp (argv[1], "--help", 6))
+-    if (argv[1] && !strncmp (argv[1], "--help", 6))
++    if ((argc < 2) || (argv[1] && !strncmp (argv[1], "--help", 6)))
      {
          help();
          return 0;
